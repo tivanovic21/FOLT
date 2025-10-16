@@ -1,0 +1,49 @@
+<ui:composition template="/predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<ui:define name="title">Aktiviranje spavanja</ui:define>
+
+	<ui:define name="content">
+		<h1>Aktiviranje spavanja</h1>
+
+
+		<h:panelGroup rendered="#{not empty spavanje.poruka}">
+			<p
+				style="#{spavanje.uspjeh 
+					? 'color: green; margin-top: 10px;' 
+					: 'color: red; margin-top: 10px;'}">
+				<h:outputText value="#{spavanje.poruka}" />
+			</p>
+		</h:panelGroup>
+
+		<div class="info"
+			style="margin: 15px 0; padding: 10px; background-color: #eef;">
+			<p>Spavanje pauzira rad poslužitelja. Vrijednost se postavlja u
+				sekundama!</p>
+		</div>
+
+		<h:form>
+			<table>
+				<tr>
+					<td>Vrijeme spavanja (sekunde):</td>
+					<td><h:inputText id="vrijeme"
+							value="#{spavanje.vrijeme}" required="true"
+							requiredMessage="Vrijeme spavanja je obavezno"
+							style="width: 100px;">
+							<f:validateLongRange minimum="1" maximum="3600" />
+						</h:inputText> <h:message for="vrijeme" style="color: red; margin-left: 10px;" />
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><h:commandButton value="Aktiviraj spavanje"
+							action="#{spavanje.aktivirajSpavanje}"
+							style="padding: 5px 15px;" /></td>
+				</tr>
+			</table>
+		</h:form>
+	</ui:define>
+
+	<ui:define name="nav" />
+</ui:composition>

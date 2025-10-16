@@ -1,0 +1,53 @@
+<ui:composition template="predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<ui:define name="title">Zadaća 3 - Početak Partner</ui:define>
+	<ui:define name="content">
+		<ul>
+			<ui:fragment>
+				<h3>JAVNO</h3>
+				<li><h:link outcome="/statusPartnera.xhtml"
+						value="Status partnera" /></li>
+				<li><h:link outcome="/partneri.xhtml"
+						value="Pregled svih partnera/restorana" /></li>
+				<li><h:link outcome="/registracijaKorisnika.xhtml"
+						value="Registracija novog korisnika" /></li>
+			</ui:fragment>
+
+			<ui:fragment>
+				<h3>PRIVATNO (korisnik mora biti prijavljen -> npr ivuk)</h3>
+				<ui:fragment>
+					<li><h:link outcome="/privatno/odabirPartnera.xhtml"
+							value="Odabir partnera" /></li>
+					<li><h:link outcome="/privatno/pregledJelovnika.xhtml"
+							value="Pregled jelovnika" /></li>
+					<li><h:link outcome="/privatno/pregledKartePica.xhtml"
+							value="Pregled karte pića" /></li>
+					<li><h:link outcome="/privatno/novaNarudzba.xhtml"
+							value="Nova narudžba" /></li>
+				</ui:fragment>
+			</ui:fragment>
+
+			<ui:fragment>
+				<h3>ADMIN (korisnik mora biti prijavljen i admin -> npr pkos)</h3>
+				<ui:fragment>
+					<li><h:link outcome="/admin/nadzornaKonzolaPartnera.xhtml"
+							value="Nadzorna konzola partnera/restorana" /></li>
+					<li><h:link outcome="/admin/spavanjePartner.xhtml"
+							value="Spavanje partnera" /></li>
+					<li><h:link outcome="/admin/pregledKorisnikaBaza.xhtml"
+							value="Pregled korisnika (baza)" /></li>
+					<li><h:link outcome="/admin/pregledKorisnikaAPI.xhtml"
+							value="Pregled korisnika (API)" /></li>
+					<li><h:link outcome="/admin/pregledObracuna.xhtml"
+							value="Pregled obračuna" /></li>
+					<li><h:link outcome="/admin/pregledRada.xhtml"
+							value="Pregled rada" /></li>
+				</ui:fragment>
+			</ui:fragment>
+		</ul>
+	</ui:define>
+
+	<ui:define name="nav" />
+</ui:composition>

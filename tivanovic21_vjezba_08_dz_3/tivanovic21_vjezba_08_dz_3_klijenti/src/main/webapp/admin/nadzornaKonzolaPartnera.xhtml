@@ -1,0 +1,202 @@
+<ui:composition template="/predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<ui:define name="title">Zadaća 3 - Nadzorna konzola partnera/restorana</ui:define>
+
+	<ui:define name="content">
+		<f:metadata>
+			<f:viewAction action="#{nadzornaKonzolaPartner.dohvatiStatuse}" />
+		</f:metadata>
+
+		<h2>Nadzorna konzola partnera/restorana</h2>
+		<br />
+
+		<h3>Status rada poslužitelja</h3>
+		<p>
+			Status rada: <strong id="statusRada"
+				style="color: #{nadzornaKonzolaPartner.statusP == 200 ? 'green' : 'red'}">
+				#{nadzornaKonzolaPartner.pocetniStatusRada} </strong>
+		</p>
+		<p>
+			Broj otvorenih narudžbi: <strong id="brojOtvorenihNarudzbi">#{nadzornaKonzolaPartner.ukupnoBrojOtvorenihNarudzbi}</strong>
+		</p>
+		<p>
+			Broj plaćenih računa: <strong id="brojPlacenihRacuna">#{nadzornaKonzolaPartner.ukupnoBrojRacuna}</strong>
+		</p>
+
+		<h3>Status dijelova poslužitelja</h3>
+		<p>
+			Glavni poslužitelj (HEAD /api/partner): <strong
+				style="color: #{nadzornaKonzolaPartner.statusP == 200 ? 'green' : 'red'}">
+				#{nadzornaKonzolaPartner.statusP == 200 ? 'RADI' : 'NE RADI'} </strong> (HTTP
+			#{nadzornaKonzolaPartner.statusP})
+		</p>
+		<p>
+			Dio 1 (HEAD /api/partner/status/1): <strong
+				style="color: #{nadzornaKonzolaPartner.statusP1 == 200 ? 'green' : 'red'}">
+				#{nadzornaKonzolaPartner.statusP1 == 200 ? 'RADI' : 'NE RADI'} </strong>
+			(HTTP #{nadzornaKonzolaPartner.statusP1})
+		</p>
+
+		<h3>Upravljanje poslužiteljem</h3>
+		<h:form id="upravljanjeForm">
+			<h:commandButton value="Osvježi statuse"
+				action="#{nadzornaKonzolaPartner.dohvatiStatuse}" />
+			<br />
+			<br />
+
+			<h:commandButton value="Pauza dio 1"
+				action="#{nadzornaKonzolaPartner.pauza(1)}" />
+			<h:commandButton value="Start dio 1"
+				action="#{nadzornaKonzolaPartner.start(1)}" />
+			<br />
+			<br />
+			<h:commandButton value="Kraj rada poslužitelja"
+				action="#{nadzornaKonzolaPartner.kraj()}" />
+		</h:form>
+
+		<h:panelGroup rendered="#{nadzornaKonzolaPartner.samoOperacija}">
+			<p
+				style="color: #{nadzornaKonzolaPartner.statusOperacije == 200 ? 'green' : 'red'};">
+				Status operacije: #{nadzornaKonzolaPartner.statusOperacije}
+				#{nadzornaKonzolaPartner.statusOperacije == 200 ? '(Uspjeh)' :
+				'(Greška)'}</p>
+		</h:panelGroup>
+
+		<h3>Interna poruka</h3>
+		<div id="internaPorukaDisplay"
+			style="min-height: 50px; background: #f5f5f5; padding: 10px; border: 1px solid #ddd;">
+			<i>Nema poruke</i>
+		</div>
+
+		<h3>Slanje interne poruke</h3>
+		<form onsubmit="posaljiInternuPoruku(event)">
+			<div class="form-group">
+				<label for="porukaText">Poruka:</label><br />
+				<textarea id="porukaText" name="poruka" rows="3" cols="50"
+					required="required"></textarea>
+			</div>
+			<div class="form-group">
+				<button type="submit">Pošalji poruku</button>
+			</div>
+		</form>
+
+		<script type="text/javascript">
+			let wsocket;
+			let socketReady = false;
+
+			function connect() {
+				let adresa = window.location.pathname;
+				let dijelovi = adresa.split("/");
+				adresa = "ws://" + window.location.hostname + ":"
+						+ window.location.port + "/" + dijelovi[1]
+						+ "/ws/partneri";
+
+				if ('WebSocket' in window) {
+					wsocket = new WebSocket(adresa);
+				} else if ('MozWebSocket' in window) {
+					wsocket = new MozWebSocket(adresa);
+				} else {
+					alert('WebSocket nije podržan od web preglednika.');
+					return;
+				}
+
+				wsocket.onmessage = onMessage;
+
+				wsocket.onopen = function() {
+					console.log("WebSocket veza uspostavljena");
+					socketReady = true;
+
+					document.getElementById("porukaText").disabled = false;
+					document.querySelector("button[type='submit']").disabled = false;
+				};
+
+				wsocket.onerror = function(error) {
+					console.log("WebSocket greška: ", error);
+					socketReady = false;
+				};
+
+				wsocket.onclose = function() {
+					console.log("WebSocket veza zatvorena");
+					socketReady = false;
+					setTimeout(connect, 3000);
+				};
+			}
+
+			function onMessage(evt) {
+				const poruka = evt.data;
+				console.log("Primljena poruka: " + poruka);
+
+				const dijelovi = poruka.split(';');
+				if (dijelovi.length >= 4) {
+					const status = dijelovi[0];
+					const brojOtvorenihNarudzbi = dijelovi[1];
+					const brojPlacenihRacuna = dijelovi[2];
+					const internaPorukaText = dijelovi[3];
+
+					const statusElem = document.getElementById("statusRada");
+					if (status === "RADI") {
+						statusElem.textContent = "RADI";
+						statusElem.style.color = "green";
+					} else {
+						statusElem.textContent = "NE RADI";
+						statusElem.style.color = "red";
+					}
+
+					document.getElementById("brojOtvorenihNarudzbi").textContent = brojOtvorenihNarudzbi;
+					document.getElementById("brojPlacenihRacuna").textContent = brojPlacenihRacuna;
+
+					const internaPorukaDiv = document
+							.getElementById("internaPorukaDisplay");
+					if (internaPorukaText &amp;&amp; internaPorukaText.trim() !== "") {
+						internaPorukaDiv.innerHTML = "<strong>Poruka:</strong> "
+								+ internaPorukaText;
+					} else {
+						internaPorukaDiv.innerHTML = "<em>Nema poruke</em>";
+					}
+				}
+			}
+
+			function posaljiInternuPoruku(event) {
+				event.preventDefault();
+				const porukaText = document.getElementById("porukaText").value
+						.trim();
+
+				if (!porukaText) {
+					alert("Unesite poruku.");
+					return;
+				}
+
+				if (!wsocket || !socketReady
+						|| wsocket.readyState !== WebSocket.OPEN) {
+					alert("WebSocket veza nije još aktivna");
+					return;
+				}
+
+				const brojOtvorenihNarudzbi = document
+						.getElementById("brojOtvorenihNarudzbi").textContent;
+				const brojPlacenihRacuna = document
+						.getElementById("brojPlacenihRacuna").textContent;
+				const poruka = "RADI;" + brojOtvorenihNarudzbi + ";"
+						+ brojPlacenihRacuna + ";" + porukaText;
+
+				wsocket.send(poruka);
+				document.getElementById("porukaText").value = "";
+				console.log("Poslana poruka: " + poruka);
+			}
+
+			window
+					.addEventListener(
+							"load",
+							function() {
+								document.getElementById("porukaText").disabled = true;
+								document.querySelector("button[type='submit']").disabled = true;
+
+								connect();
+							});
+		</script>
+	</ui:define>
+
+	<ui:define name="nav" />
+</ui:composition>

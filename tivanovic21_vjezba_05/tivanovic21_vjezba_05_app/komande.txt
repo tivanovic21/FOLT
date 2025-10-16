@@ -1,0 +1,1 @@
+target/maven-jlink/default/bin/java -m tivanovic21_vjezba_05_app/edu.unizg.foi.nwtis.tivanovic21.vjezba_05.IzvrsiteljZadatka NWTiS_05.1.txt tivanovic21 lozinka

@@ -1,0 +1,15 @@
+adresa=20.24.5.2
+brojCekaca=10
+gpsDuzina=16.32023
+gpsSirina=46.30154 
+id=3
+kodZaKraj=BABECABACC
+kodAdmin=CACEDACECC
+kuhinja=VK
+mreznaVrata=8030
+mreznaVrataKraj=8000
+mreznaVrataRad=8002
+mreznaVrataRegistracija=8001
+naziv=FOLT 3 - Varaždin, Ul. Braće Radić 102
+pauzaDretve=100
+kvotaNarudzbi=5

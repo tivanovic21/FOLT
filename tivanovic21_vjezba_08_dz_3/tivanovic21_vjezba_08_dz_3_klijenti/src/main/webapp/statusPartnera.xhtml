@@ -1,0 +1,30 @@
+<ui:composition template="predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<ui:define name="title">Zadaća 3 - Status poslužitelja Partner</ui:define>
+	<ui:define name="content">
+		<h1>Status poslužitelja Partner</h1>
+		<br />
+
+		<f:metadata>
+			<f:event type="preRenderView"
+				listener="#{statusPartnera.provjeriStatus}" />
+		</f:metadata>
+
+		<h:form>
+			<h:commandButton value="Osvježi status"
+				action="#{statusPartnera.provjeriStatus}" />
+		</h:form>
+
+		<h:panelGroup rendered="#{not empty statusPartnera.poruka}">
+			<br />
+			<h:outputText value="#{statusPartnera.poruka}"
+				style="#{statusPartnera.radi ? 'color: green; font-weight: bold;' : 'color: red; font-weight: bold;'}" />
+			<br />
+			<h:outputText value="Status kod: #{statusPartnera.kod}"
+				style="font-weight: bold;" />
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="nav" />
+</ui:composition>

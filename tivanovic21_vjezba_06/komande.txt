@@ -1,0 +1,36 @@
+KREIRAJ I POKRENI TVRTKA SLIKU
+docker build -f Dockerfile.faza_3.1 -t posluzitelj_tvrtka:faza_3 .
+docker run -it -d -p 8000:8000 --name=PosluziteljTvrtka posluzitelj_tvrtka:faza_3
+
+POKRENI JMETER
+docker run -it -d --mount type=bind,source="$(pwd)"/podaci,target=/usr/app/podaci --name=jmeter jmeter:faza_3
+
+ZAUSTAVI KONTEJNERE I OBRIŠI
+docker stop PosluziteljTvrtka
+docker rm PosluziteljTvrtka
+docker rm jmeter
+
+POKRENI KONTEJNER
+docker start PosluziteljTvrtka
+
+PREGLED AKTIVNIH DOCKER CONTAINERA
+docker ps
+
+UĐI U DOCKER CONTAINER
+docker exec -it PosluziteljTvrtka /bin/bash
+
+PREGLED AKTIVNIH PROCESA KAD SI UNUTAR DOCKER CONTAINERA
+ps -ef
+
+PREGLED SLIKA
+docker image ls
+
+
+PRIMJER UOBIČAJENOG FLOWA:
+1) KREIRAJ I POKRENI ___ SLIKU
+2) TESTIRAJ NEKAKO (npr. preko jmetera ručno ili kroz POKRENI JMETER)
+    - ako se koristi POKRENI JMETER treba ti direkotrij "podaci" unutar direktorija "...tvrtka_06"
+3) OPCIONALNO UĆI U DOCKER CONTAINER I POKRENUTI .JAR FILE SA java -jar tivanovic21... NWTiS_04.txt
+    - ovo se ne treba radit ako se koristi faza 3
+4) NAKON ŠTO ZAVRŠIMO S TESTIRANJEM OBRISATI KONTEJNERE ZA PosluziteljTvrtka i jmeter (i sve druge koje smo kreirali
+za potrebe testiranja)

@@ -1,0 +1,76 @@
+<ui:composition template="predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<ui:define name="title">Zadaća 3 - Detalji partnera</ui:define>
+	<ui:define name="content">
+		<h1>Detalji partnera</h1>
+		<br />
+
+		<h:panelGroup rendered="#{not empty pregledPartnera.greska}">
+			<div style="color: red; padding: 10px;">
+				<h:outputText value="#{pregledPartnera.greska}" />
+			</div>
+		</h:panelGroup>
+
+		<h:panelGroup rendered="#{not empty pregledPartnera.odabraniPartner}">
+			<div style="font-weight: bold; margin-bottom: 10px;">
+				<h:outputText value="#{pregledPartnera.odabraniPartner.naziv()}" />
+			</div>
+
+			<table border="1" cellpadding="6">
+				<tr>
+					<th>Partner ID</th>
+					<td><h:outputText
+							value="#{pregledPartnera.odabraniPartner.id()}" /></td>
+				</tr>
+				<tr>
+					<th>Naziv partnera</th>
+					<td><h:outputText
+							value="#{pregledPartnera.odabraniPartner.naziv()}" /></td>
+				</tr>
+				<tr>
+					<th>Vrsta kuhinje</th>
+					<td><h:outputText
+							value="#{pregledPartnera.odabraniPartner.vrstaKuhinje()}" /></td>
+				</tr>
+				<tr>
+					<th>Adresa</th>
+					<td><h:outputText
+							value="#{pregledPartnera.odabraniPartner.adresa()}" /></td>
+				</tr>
+				<tr>
+					<th>GPS Širina</th>
+					<td><h:outputText
+							value="#{pregledPartnera.odabraniPartner.gpsSirina()}" /></td>
+				</tr>
+				<tr>
+					<th>GPS Dužina</th>
+					<td><h:outputText
+							value="#{pregledPartnera.odabraniPartner.gpsDuzina()}" /></td>
+				</tr>
+				<tr>
+					<th>Mrežna vrata</th>
+					<td><h:outputText
+							value="#{pregledPartnera.odabraniPartner.mreznaVrata()}" /></td>
+				</tr>
+				<tr>
+					<th>Vrata za kraj</th>
+					<td><h:outputText
+							value="#{pregledPartnera.odabraniPartner.mreznaVrataKraj()}" /></td>
+				</tr>
+				<tr>
+					<th>Admin kod</th>
+					<td><h:outputText
+							value="#{pregledPartnera.odabraniPartner.adminKod()}" /></td>
+				</tr>
+			</table>
+		</h:panelGroup>
+
+		<h:panelGroup
+			rendered="#{empty pregledPartnera.odabraniPartner and empty pregledPartnera.greska}">
+			<div style="color: red; padding: 10px;">Partner nije pronađen</div>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="nav" />
+</ui:composition>

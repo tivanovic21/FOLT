@@ -1,0 +1,54 @@
+<ui:composition template="/predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<ui:define name="title">Zadaća 3 - Pregled karte pića</ui:define>
+
+	<ui:define name="content">
+		<h1>Jelovnik restorana</h1>
+		<br />
+		<h:panelGroup rendered="#{not empty pregledPonude.porukaGreske}">
+			<div style="color: red; padding: 10px;">
+				<h:outputText value="#{pregledPonude.porukaGreske}" />
+			</div>
+		</h:panelGroup>
+
+		<f:metadata>
+			<f:event type="preRenderView"
+				listener="#{pregledPonude.dohvatiKartuPica}" />
+		</f:metadata>
+		<h:panelGroup rendered="#{not empty pregledPonude.kartaPicaList}">
+			<h:dataTable value="#{pregledPonude.kartaPicaList}" var="pice"
+				border="1" cellpadding="6">
+				<h:column>
+					<f:facet name="header">R.br.</f:facet>
+					<h:outputText
+						value="#{pregledPonude.kartaPicaList.indexOf(pice) + 1}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">ID</f:facet>
+					<h:outputText value="#{pice.id()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Naziv</f:facet>
+					<h:outputText value="#{pice.naziv()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Količina</f:facet>
+					<h:outputText value="#{pice.kolicina()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Cijena</f:facet>
+					<h:outputText value="#{pice.cijena()}" />
+				</h:column>
+			</h:dataTable>
+		</h:panelGroup>
+
+		<h:panelGroup rendered="#{empty pregledPonude.kartaPicaList}">
+			<div style="margin-top: 15px; font-style: italic;">Karta pića
+				nije dostupna ili nema podataka</div>
+		</h:panelGroup>
+	</ui:define>
+
+	<ui:define name="nav" />
+</ui:composition>

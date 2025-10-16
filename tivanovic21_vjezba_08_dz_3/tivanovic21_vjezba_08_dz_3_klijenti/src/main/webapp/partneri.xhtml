@@ -1,0 +1,65 @@
+<ui:composition template="predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<ui:define name="title">Zadaća 3 - Pregled partnera</ui:define>
+	<ui:define name="content">
+		<h1>Pregled partnera/restorana</h1>
+		<br />
+
+		<h:panelGroup rendered="#{not empty pregledPartnera.greska}">
+			<div style="color: red; padding: 10px;">
+				<h:outputText value="#{pregledPartnera.greska}" />
+			</div>
+		</h:panelGroup>
+
+		<h:panelGroup rendered="#{not empty pregledPartnera.partneri}">
+			<p>
+				Ukupno partnera: <strong><h:outputText
+						value="#{pregledPartnera.partneri.size()}" /></strong>
+			</p>
+
+			<h:dataTable value="#{pregledPartnera.partneri}" var="partner"
+				border="1" cellpadding="5">
+				<h:column>
+					<f:facet name="header">R.br.</f:facet>
+					<h:outputText
+						value="#{pregledPartnera.partneri.indexOf(partner) + 1}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">ID</f:facet>
+					<h:outputText value="#{partner.id()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Naziv</f:facet>
+					<h:link outcome="partner.xhtml" value="#{partner.naziv()}">
+						<f:param name="id" value="#{partner.id()}" />
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Vrsta kuhinje</f:facet>
+					<h:outputText value="#{partner.vrstaKuhinje()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Adresa</f:facet>
+					<h:outputText value="#{partner.adresa()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Mrežna vrata</f:facet>
+					<h:outputText value="#{partner.mreznaVrata()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Vrata za kraj</f:facet>
+					<h:outputText value="#{partner.mreznaVrataKraj()}" />
+				</h:column>
+			</h:dataTable>
+		</h:panelGroup>
+
+		<h:panelGroup
+			rendered="#{empty pregledPartnera.partneri and empty pregledPartnera.greska}">
+			<div style="margin-top: 15px; font-style: italic;">Trenutno
+				nema dostupnih partnera.</div>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="nav" />
+</ui:composition>

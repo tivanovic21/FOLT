@@ -1,0 +1,177 @@
+<ui:composition template="/predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<f:metadata>
+		<f:viewAction action="#{novaNarudzba.getJelovnik}" />
+		<f:viewAction action="#{novaNarudzba.getKartaPica}" />
+		<f:viewAction
+			action="#{novaNarudzba.ucitajAkoPostojiOtvorenaNarudzba}" />
+	</f:metadata>
+
+	<ui:define name="title">Zadaća 3 - Nova narudžba</ui:define>
+	<ui:define name="content">
+		<h2>Nova narudžba</h2>
+		<br />
+
+		<h:panelGroup
+			rendered="#{prijavaKorisnika.prijavljen and prijavaKorisnika.partnerOdabran}">
+
+			<h:panelGroup rendered="#{not novaNarudzba.aktivnaNarudzba}">
+				<div
+					style="background-color: #fff3cd; color: #856404; padding: 10px;">
+					<p>
+						<strong>Nemate aktivnu narudžbu.</strong>
+					</p>
+					<h:form>
+						<h:commandButton value="Kreiraj novu narudžbu"
+							action="#{novaNarudzba.kreirajNarudzbu}" />
+					</h:form>
+				</div>
+			</h:panelGroup>
+
+			<h:panelGroup rendered="#{novaNarudzba.aktivnaNarudzba}">
+				<h:panelGroup rendered="#{not empty novaNarudzba.poruka}">
+					<div
+						style="padding: 10px; color: #{novaNarudzba.uspjeh ? 'green' : 'red'};">
+						<h:outputText value="#{novaNarudzba.poruka}"
+							style="font-weight: bold;" />
+					</div>
+				</h:panelGroup>
+
+				<div style="border: 1px solid #ccc; padding: 15px;">
+					<h3>Upravljanje narudžbom</h3>
+					<h:form>
+						<h:commandButton value="PLATI NARUDŽBU"
+							action="#{novaNarudzba.platiNarudzbu}" />
+					</h:form>
+				</div>
+
+				<div style="margin-top: 20px;">
+					<h4>Naručivanje jela</h4>
+					<h:form>
+						<h:outputLabel for="jeloSelect" value="Odaberite jelo:" />
+						<h:selectOneMenu id="jeloSelect"
+							value="#{novaNarudzba.odabranoJelo}">
+							<f:selectItem itemLabel="-- Odaberite jelo --" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{novaNarudzba.jelovnik}" var="jelo"
+								itemLabel="#{jelo.naziv()} (#{jelo.cijena()})"
+								itemValue="#{jelo.id()}" />
+						</h:selectOneMenu>
+						<br />
+						<br />
+						<h:outputLabel for="kolicinaJela" value="Količina (1-100):" />
+						<h:inputText id="kolicinaJela"
+							value="#{novaNarudzba.kolicinaJela}" style="width: 60px;">
+							<f:validateDoubleRange minimum="1.0" maximum="100.0" />
+						</h:inputText>
+						<h:message for="kolicinaJela" style="color: red;" />
+						<br />
+						<br />
+						<h:commandButton value="Dodaj jelo u narudžbu"
+							action="#{novaNarudzba.dodajJelo}" />
+					</h:form>
+				</div>
+
+				<div style="margin-top: 20px;">
+					<h4>Naručivanje pića</h4>
+					<h:form>
+						<h:outputLabel for="piceSelect" value="Odaberite piće:" />
+						<h:selectOneMenu id="piceSelect"
+							value="#{novaNarudzba.odabranoPice}">
+							<f:selectItem itemLabel="-- Odaberite piće --" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{novaNarudzba.kartaPica}" var="pice"
+								itemLabel="#{pice.naziv()} (#{pice.cijena()})"
+								itemValue="#{pice.id()}" />
+						</h:selectOneMenu>
+						<br />
+						<br />
+						<h:outputLabel for="kolicinaPica" value="Količina (1-100):" />
+						<h:inputText id="kolicinaPica"
+							value="#{novaNarudzba.kolicinaPica}" style="width: 60px;">
+							<f:validateDoubleRange minimum="1.0" maximum="100.0" />
+						</h:inputText>
+						<h:message for="kolicinaPica" style="color: red;" />
+						<br />
+						<br />
+						<h:commandButton value="Dodaj piće u narudžbu"
+							action="#{novaNarudzba.dodajPice}" />
+					</h:form>
+				</div>
+
+				<div style="display: flex; gap: 15px; margin-top: 20px;">
+					<div style="flex: 1; border: 1px solid #ccc; padding: 10px;">
+						<h3>Naručena jela</h3>
+						<table border="1" cellpadding="5">
+							<tr>
+								<th>Naziv</th>
+								<th>Količina</th>
+								<th>Cijena</th>
+								<th>Ukupno</th>
+							</tr>
+							<ui:repeat value="#{novaNarudzba.narucenaJela}" var="jelo"
+								varStatus="i">
+								<tr>
+									<td><h:outputText value="#{jelo.naziv()}" /></td>
+									<td><h:outputText
+											value="#{novaNarudzba.kolicineJela[i.index]}" /></td>
+									<td><h:outputText value="#{jelo.cijena()}" /></td>
+									<td><h:outputText
+											value="#{jelo.cijena() * novaNarudzba.kolicineJela[i.index]}" /></td>
+								</tr>
+							</ui:repeat>
+						</table>
+						<h:panelGroup rendered="#{empty novaNarudzba.narucenaJela}">
+							<p style="font-style: italic; color: gray;">Nema naručenih
+								jela</p>
+						</h:panelGroup>
+					</div>
+
+					<div style="flex: 1; border: 1px solid #ccc; padding: 10px;">
+						<h3>Naručena pića</h3>
+						<table border="1" cellpadding="5">
+							<tr>
+								<th>Naziv</th>
+								<th>Količina</th>
+								<th>Cijena</th>
+								<th>Ukupno</th>
+							</tr>
+							<ui:repeat value="#{novaNarudzba.narucenaPica}" var="pice"
+								varStatus="i">
+								<tr>
+									<td><h:outputText value="#{pice.naziv()}" /></td>
+									<td><h:outputText
+											value="#{novaNarudzba.kolicinePica[i.index]}" /></td>
+									<td><h:outputText value="#{pice.cijena()}" /></td>
+									<td><h:outputText
+											value="#{pice.cijena() * novaNarudzba.kolicinePica[i.index]}" /></td>
+								</tr>
+							</ui:repeat>
+						</table>
+						<h:panelGroup rendered="#{empty novaNarudzba.narucenaPica}">
+							<p style="font-style: italic; color: gray;">Nema naručenih
+								pića</p>
+						</h:panelGroup>
+					</div>
+				</div>
+			</h:panelGroup>
+		</h:panelGroup>
+
+		<h:panelGroup
+			rendered="#{not prijavaKorisnika.prijavljen or not prijavaKorisnika.partnerOdabran}">
+			<div
+				style="background-color: #fff3cd; color: #856404; padding: 10px;">
+				<h:panelGroup rendered="#{not prijavaKorisnika.prijavljen}">
+					Morate se prijaviti da biste mogli kreirati narudžbu
+				</h:panelGroup>
+				<h:panelGroup
+					rendered="#{prijavaKorisnika.prijavljen and not prijavaKorisnika.partnerOdabran}">
+					Morate odabrati partnera da biste mogli kreirati narudžbu
+				</h:panelGroup>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+	<ui:define name="nav"></ui:define>
+</ui:composition>

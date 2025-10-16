@@ -1,0 +1,86 @@
+{
+	"folders": {},
+	"connections": {
+		"hsqldb_server-196612a5a42-5ef523c9b56178b4": {
+			"provider": "generic",
+			"driver": "hsqldb_server",
+			"name": "HSQLDB-nwtis_1 - SA",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "9001",
+				"database": "nwtis_1",
+				"url": "jdbc:hsqldb:hsql://localhost:9001/nwtis_1",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
+		},
+		"hsqldb_server-196612f6797-1b42959c62aad7e9": {
+			"provider": "generic",
+			"driver": "hsqldb_server",
+			"name": "HSQLDB-nwtis_1 - nwtis_1",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "9001",
+				"database": "nwtis_1",
+				"url": "jdbc:hsqldb:hsql://localhost:9001/nwtis_1",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
+		},
+		"h2_server-196615eb374-4baf42afd342291f": {
+			"provider": "h2",
+			"driver": "h2_server",
+			"name": "H2-nwtis_1 - nwtis_1",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "9092",
+				"database": "nwtis_1",
+				"url": "jdbc:h2:tcp://localhost:9092/nwtis_1",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
+		},
+		"h2_server-19712daafa9-44a366a5ca9ee73e": {
+			"provider": "h2",
+			"driver": "h2_server",
+			"name": "H2-nwtis_1- SA",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "9092",
+				"database": "nwtis_1",
+				"url": "jdbc:h2:tcp://localhost:9092/nwtis_1",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native",
+				"handlers": {}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
+		}
+	}
+}

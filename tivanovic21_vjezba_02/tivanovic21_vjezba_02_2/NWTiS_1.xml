@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>NWTiS 2024.</comment>
+<entry key="ime">Toni</entry>
+<entry key="prezime">Ivanović</entry>
+<entry key="kolegij">NWTiS</entry>
+<entry key="grad">Zagreb</entry>
+</properties>

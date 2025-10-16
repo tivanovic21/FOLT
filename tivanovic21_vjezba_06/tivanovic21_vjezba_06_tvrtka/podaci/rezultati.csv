@@ -1,0 +1,4 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1745827038671,12,Neispravna komanda KRAJ 1,200,OK,Grupa dretvi za kraj 1-1,text,true,,74,0,1,1,null,11,0,5
+1745827038687,1,Neispravna komanda KRAJ 2,200,OK,Grupa dretvi za kraj 1-1,text,true,,74,0,1,1,null,1,0,1
+1745827038690,1,Ispravna komanda KRAJ,200,OK,Grupa dretvi za kraj 1-1,text,false,Test failed: text expected to contain /OK/,74,0,1,1,null,1,0,0

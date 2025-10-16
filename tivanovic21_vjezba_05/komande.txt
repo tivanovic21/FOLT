@@ -1,0 +1,8 @@
+target/maven-jlink/default/bin/java -m tivanovic21_vjezba_05_app/edu.unizg.foi.nwtis.tivanovic21.vjezba_05.IzvrsiteljZadatka NWTiS_05.3.txt tivanovic21 123456
+
+// OVU KOMANDU KORISTI NA LABOSIMA
+sudo java -Dfile.encoding=UTF-8 -cp /opt/h2/bin/h2-2.3.232.jar org.h2.tools.Server -tcp -tcpAllowOthers -webAllowOthers -baseDir /opt/database -ifNotExists
+sudo java -classpath ../lib/hsqldb.jar org.hsqldb.server.Server --database.0 file:nwtis_1 --dbname.0 nwtis_1 --port 9001
+
+// OVO SU LOKALNE KOMANDE JER SU DRUGAČIJI PATHS
+sudo java -Dfile.encoding=UTF-8 -cp /opt/homebrew/Cellar/h2/2.3.232/libexec/bin/h2-2.3.232.jar org.h2.tools.Server -tcp -tcpAllowOthers -webAllowOthers -baseDir /opt/database -ifNotExists

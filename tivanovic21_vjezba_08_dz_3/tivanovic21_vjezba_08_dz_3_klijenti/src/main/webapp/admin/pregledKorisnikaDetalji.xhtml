@@ -1,0 +1,35 @@
+<ui:composition template="/predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<ui:define name="title">Detalji korisnika</ui:define>
+
+	<ui:define name="content">
+		<h1>Detalji korisnika</h1>
+
+		<h:panelGroup rendered="#{not empty korisnikDetalji.korisnik}">
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputText value="Korisničko ime:" />
+				<h:outputText value="#{korisnikDetalji.korisnik.korisnik()}" />
+
+				<h:outputText value="Ime:" />
+				<h:outputText value="#{korisnikDetalji.korisnik.ime()}" />
+
+				<h:outputText value="Prezime:" />
+				<h:outputText value="#{korisnikDetalji.korisnik.prezime()}" />
+
+				<h:outputText value="Email:" />
+				<h:outputText value="#{korisnikDetalji.korisnik.email()}" />
+
+				<h:outputText value="Lozinka:" />
+				<h:outputText value="#{korisnikDetalji.korisnik.lozinka()}" />
+			</h:panelGrid>
+		</h:panelGroup>
+
+		<h:panelGroup rendered="#{empty korisnikDetalji.korisnik}">
+			<h:outputText value="#{korisnikDetalji.poruka}" styleClass="vazno" />
+		</h:panelGroup>
+	</ui:define>
+
+	<ui:define name="nav" />
+</ui:composition>

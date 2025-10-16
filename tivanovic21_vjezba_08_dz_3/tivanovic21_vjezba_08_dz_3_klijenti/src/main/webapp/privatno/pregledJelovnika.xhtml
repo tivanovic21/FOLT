@@ -1,0 +1,50 @@
+<ui:composition template="/predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<ui:define name="title">Zadaća 3 - Pregled jelovnika</ui:define>
+
+	<ui:define name="content">
+		<h1>Jelovnik restorana</h1>
+		<br />
+		<h:panelGroup rendered="#{not empty pregledPonude.porukaGreske}">
+			<div style="color: red; padding: 10px;">
+				<h:outputText value="#{pregledPonude.porukaGreske}" />
+			</div>
+		</h:panelGroup>
+
+		<f:metadata>
+			<f:event type="preRenderView"
+				listener="#{pregledPonude.dohvatiJelovnik}" />
+		</f:metadata>
+		<h:panelGroup rendered="#{not empty pregledPonude.jelovnikList}">
+			<h:dataTable value="#{pregledPonude.jelovnikList}" var="jelo"
+				border="1" cellpadding="6">
+				<h:column>
+					<f:facet name="header">R.br.</f:facet>
+					<h:outputText
+						value="#{pregledPonude.jelovnikList.indexOf(jelo) + 1}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">ID</f:facet>
+					<h:outputText value="#{jelo.id()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Naziv</f:facet>
+					<h:outputText value="#{jelo.naziv()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Cijena</f:facet>
+					<h:outputText value="#{jelo.cijena()}" />
+				</h:column>
+			</h:dataTable>
+		</h:panelGroup>
+
+		<h:panelGroup rendered="#{empty pregledPonude.jelovnikList}">
+			<div style="margin-top: 15px; font-style: italic;">Jelovnik
+				nije dostupan ili nema podataka</div>
+		</h:panelGroup>
+	</ui:define>
+
+	<ui:define name="nav" />
+</ui:composition>

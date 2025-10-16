@@ -1,0 +1,58 @@
+name: tivanovic21_docker_compose
+
+volumes:
+  svezak_tivanovic21:
+    external: true
+
+networks:
+  mreza_tivanovic21:
+    external: true
+
+services:
+  tvrtka:
+    build:
+      context: ./tivanovic21_vjezba_08_dz_3_tvrtka
+      dockerfile: Dockerfile
+    image: tvrtka_tivanovic21
+    container_name: tvrtka_tivanovic21
+    hostname: tvrtka_tivanovic21
+    networks:
+      mreza_tivanovic21:
+        ipv4_address: 20.24.5.2
+    volumes:
+      - svezak_tivanovic21:/usr/app/podaci
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+
+  partner:
+    build:
+      context: ./tivanovic21_vjezba_08_dz_3_partner
+      dockerfile: Dockerfile
+    image: partner_tivanovic21
+    container_name: partner_tivanovic21
+    hostname: partner_tivanovic21
+    networks:
+      mreza_tivanovic21:
+        ipv4_address: 20.24.5.3
+    volumes:
+      - svezak_tivanovic21:/usr/app/podaci
+    ports:
+      - "8010:8010"
+      - "8011:8011"
+    depends_on:
+      - tvrtka
+
+  servisi:
+    build:
+      context: ./tivanovic21_vjezba_08_dz_3_servisi
+      dockerfile: Dockerfile
+    image: servis_tivanovic21
+    container_name: servis_tivanovic21
+    hostname: servis_tivanovic21
+    networks:
+      mreza_tivanovic21:
+        ipv4_address: 20.24.5.20
+    depends_on:
+      - partner

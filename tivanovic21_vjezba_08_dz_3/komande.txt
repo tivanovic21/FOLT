@@ -1,0 +1,46 @@
+network create --subnet=20.24.5.0/24 mreza_tivanovic21
+network inspect mreza_tivanovic21
+
+docker volume create svezak_tivanovic21
+docker inspect create svezak_tivanovic21
+
+sudo cp podaci/*.* /var/lib/docker/volumes/svezak_tivanovic21/_data
+
+docker build -t tvrtka_tivanovic21 -f Dockerfile .
+
+docker run -it -d --network=mreza_tivanovic21 --ip 20.24.5.2 \
+--name=tvrtka_tivanovic21 --hostname=tvrtka_tivanovic21 \
+--mount source=svezak_tivanovic21,target=/usr/app/podaci \
+tvrtka_tivanovic21:latest
+
+docker build -t partner_tivanovic21 -f Dockerfile .
+
+docker run -it -d --network=mreza_tivanovic21 --ip 20.24.5.3 \
+--name=partner_tivanovic21 --hostname=partner_tivanovic21 \
+--mount source=svezak_tivanovic21,target=/usr/app/podaci \
+partner_tivanovic21:latest
+
+docker run -it -d \
+--network=mreza_tivanovic21 \
+--ip 20.24.5.20 \
+--name= servis_tivanovic21 \
+--hostname= servis_tivanovic21 \
+servis_tivanovic21:latest
+
+
+
+
+
+
+
+
+
+
+## PAYARA
+#pasteo sam sve kako sam ja pokreno payaru, na macu ces morat drugacije
+#jer neces imat na istoj putanji
+
+1) NWTiS_1@webKolegiji2025:/opt/payara_web/glassfish$: ./bin/startserv domain1
+2) mvn cargo:redeploy -P ServerEE-local
+3) xdg-open http://localhost:8080/tivanovic21_vjezba_08_dz_3_klijenti
+

@@ -1,0 +1,134 @@
+<ui:composition template="/predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core" xmlns:pt="jakarta.faces.passthrough">
+
+	<ui:define name="title">Zadaća 3 - Pregled obračuna partnera</ui:define>
+
+	<ui:define name="content">
+		<h2>Pregled obračuna partnera</h2>
+		<br />
+
+		<h:panelGroup
+			rendered="#{prijavaKorisnika.prijavljen and prijavaKorisnika.partnerOdabran}">
+			<p>
+				<strong>Odabrani partner:</strong>
+				#{prijavaKorisnika.odabraniPartner.naziv()} -
+				#{prijavaKorisnika.odabraniPartner.vrstaKuhinje()}
+			</p>
+		</h:panelGroup>
+
+		<h:panelGroup rendered="#{prijavaKorisnika.partnerOdabran}">
+			<h3>Odabir razdoblja</h3>
+			<h:form id="filterForm">
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:outputLabel for="toggleFormat" value="Način unosa:" />
+					<h:selectBooleanCheckbox id="toggleFormat"
+						value="#{obracuni.dateFormat}">
+						<f:ajax execute="@this" render="inputBlocks" />
+					</h:selectBooleanCheckbox>
+					<h:outputText value="(označeno = datum, neoznačeno = timestamp)" />
+					<h:outputText value="" />
+				</h:panelGrid>
+
+				<h:panelGroup id="inputBlocks">
+					<h:panelGroup layout="block"
+						style="#{obracuni.dateFormat ? '' : 'display:none'}">
+						<h:panelGrid columns="2" cellpadding="5">
+							<h:outputLabel for="datumOd" value="Datum od:" />
+							<h:inputText id="datumOd" value="#{obracuni.datumOd}"
+								pt:type="date">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:inputText>
+
+							<h:outputLabel for="datumDo" value="Datum do:" />
+							<h:inputText id="datumDo" value="#{obracuni.datumDo}"
+								pt:type="date">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:inputText>
+						</h:panelGrid>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block"
+						style="#{not obracuni.dateFormat ? '' : 'display:none'}">
+						<h:panelGrid columns="2" cellpadding="5">
+							<h:outputLabel for="timestampOd" value="Timestamp od:" />
+							<h:inputText id="timestampOd" value="#{obracuni.timestampOd}" />
+
+							<h:outputLabel for="timestampDo" value="Timestamp do:" />
+							<h:inputText id="timestampDo" value="#{obracuni.timestampDo}" />
+						</h:panelGrid>
+					</h:panelGroup>
+				</h:panelGroup>
+
+				<br />
+				<h:panelGroup>
+					<h:commandButton value="Pretraži obračune"
+						action="#{obracuni.pretraziObracune}" />
+					<h:commandButton value="Očisti" action="#{obracuni.ocisti}" />
+				</h:panelGroup>
+			</h:form>
+
+
+			<h:panelGroup rendered="#{not empty obracuni.poruka}">
+				<p>
+					<h:outputText value="#{obracuni.poruka}" />
+				</p>
+			</h:panelGroup>
+
+			<h:panelGroup
+				rendered="#{obracuni.uspjeh and not empty obracuni.obracuni}">
+				<h3>Obračuni (#{obracuni.obracuni.size()} stavki)</h3>
+
+				<h:dataTable value="#{obracuni.obracuni}" var="obracun" border="1"
+					cellpadding="5">
+					<h:column>
+						<f:facet name="header">R.br.</f:facet>
+						<h:outputText value="#{obracuni.obracuni.indexOf(obracun) + 1}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Datum i vrijeme</f:facet>
+						<h:outputText value="#{obracuni.formatDatum(obracun.vrijeme())}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Datum i vrijeme (timestamp)</f:facet>
+						<h:outputText value="#{obracun.vrijeme()}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">ID obračuna</f:facet>
+						<h:outputText value="#{obracun.id()}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Tip</f:facet>
+						<h:outputText value="#{obracuni.formatJeloPice(obracun.jelo())}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Količina</f:facet>
+						<h:outputText value="#{obracun.kolicina()}">
+							<f:convertNumber pattern="#0.0" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">Cijena</f:facet>
+						<h:outputText value="#{obracun.cijena()}">
+							<f:convertNumber pattern="#0.00" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">Iznos</f:facet>
+						<h:outputText value="#{obracun.kolicina() * obracun.cijena()}" />
+					</h:column>
+				</h:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
+
+		<h:panelGroup
+			rendered="#{not prijavaKorisnika.prijavljen or not prijavaKorisnika.partnerOdabran}">
+            Morate odabrati partnera da biste mogli pregledati obračune
+            <br />
+			<h:link outcome="/privatno/odabirPartnera.xhtml"
+				value="Odabir partnera" />
+		</h:panelGroup>
+	</ui:define>
+
+	<ui:define name="nav" />
+</ui:composition>

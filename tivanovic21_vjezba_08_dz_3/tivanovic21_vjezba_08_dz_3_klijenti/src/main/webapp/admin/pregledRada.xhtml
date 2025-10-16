@@ -1,0 +1,122 @@
+<ui:composition template="/predlozak.xhtml"
+    xmlns:ui="jakarta.faces.facelets"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:pt="jakarta.faces.passthrough">
+
+    <ui:define name="title">Zadaća 3 - Pregled rada korisnika</ui:define>
+
+    <ui:define name="content">
+        <h2>Pregled rada korisnika</h2>
+        <br />
+
+        <h3>Odabir korisnika i razdoblja</h3>
+        <h:form id="filterForm">
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputLabel for="korisnikSelect" value="Odaberi korisnika:" />
+                <h:selectOneMenu id="korisnikSelect" value="#{pregledRada.odabraniKorisnik}">
+                    <f:selectItem itemLabel="-- Odaberite korisnika --" itemValue="" />
+                    <f:selectItems value="#{pregledRada.korisnici}" var="korisnik"
+                        itemLabel="#{korisnik.korisnik()} (#{korisnik.ime()} #{korisnik.prezime()})"
+                        itemValue="#{korisnik.korisnik()}" />
+                </h:selectOneMenu>
+
+                <h:outputLabel for="toggleFormat" value="Način unosa:" />
+                <h:selectBooleanCheckbox id="toggleFormat" value="#{pregledRada.dateFormat}">
+                    <f:ajax execute="@this" render="inputBlocks" />
+                </h:selectBooleanCheckbox>
+                <h:outputText value="(označeno = datum, neoznačeno = timestamp)" />
+                <h:outputText value="" />
+            </h:panelGrid>
+
+            <h:panelGroup id="inputBlocks">
+                <h:panelGroup layout="block" style="#{pregledRada.dateFormat ? '' : 'display:none'}">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel for="datumOd" value="Datum od:" />
+                        <h:inputText id="datumOd" value="#{pregledRada.datumOd}" pt:type="date">
+                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                        </h:inputText>
+
+                        <h:outputLabel for="datumDo" value="Datum do:" />
+                        <h:inputText id="datumDo" value="#{pregledRada.datumDo}" pt:type="date">
+                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                        </h:inputText>
+                    </h:panelGrid>
+                </h:panelGroup>
+
+                <h:panelGroup layout="block" style="#{not pregledRada.dateFormat ? '' : 'display:none'}">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLabel for="timestampOd" value="Timestamp od:" />
+                        <h:inputText id="timestampOd" value="#{pregledRada.timestampOd}" />
+
+                        <h:outputLabel for="timestampDo" value="Timestamp do:" />
+                        <h:inputText id="timestampDo" value="#{pregledRada.timestampDo}" />
+                    </h:panelGrid>
+                </h:panelGroup>
+            </h:panelGroup>
+
+            <br />
+            <h:panelGroup>
+                <h:commandButton value="Pretraži zapise" action="#{pregledRada.pretraziZapise}" />
+                <h:commandButton value="Očisti" action="#{pregledRada.ocisti}" />
+            </h:panelGroup>
+        </h:form>
+
+        <h:panelGroup rendered="#{not empty pregledRada.poruka}">
+            <p>
+                <h:outputText value="#{pregledRada.poruka}"
+                    style="#{pregledRada.uspjeh ? 'color: green;' : 'color: red;'}" />
+            </p>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{not empty pregledRada.odabraniKorisnik}">
+            <p>
+                <strong>Odabrani korisnik:</strong>
+                #{pregledRada.odabraniKorisnikNaziv}
+            </p>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{pregledRada.uspjeh and not empty pregledRada.zapisi}">
+            <h3>Zapisi aktivnosti (#{pregledRada.zapisi.size()} stavki)</h3>
+
+            <h:dataTable value="#{pregledRada.zapisi}" var="zapis" border="1" cellpadding="5">
+                <h:column>
+                    <f:facet name="header">R.br.</f:facet>
+                    <h:outputText value="#{pregledRada.zapisi.indexOf(zapis) + 1}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Datum i vrijeme</f:facet>
+                    <h:outputText value="#{pregledRada.formatDatum(zapis.vrijeme.time)}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Timestamp</f:facet>
+                    <h:outputText value="#{zapis.vrijeme.time}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Korisnik</f:facet>
+                    <h:outputText value="#{zapis.korisnickoime}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Adresa računala</f:facet>
+                    <h:outputText value="#{zapis.adresaracunala}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">IP adresa</f:facet>
+                    <h:outputText value="#{zapis.ipadresaracunala}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Akcija</f:facet>
+                    <h:outputText value="#{zapis.opisrada}" />
+                </h:column>
+            </h:dataTable>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{pregledRada.uspjeh and empty pregledRada.zapisi and not empty pregledRada.odabraniKorisnik}">
+            <p>
+                Nema zapisa aktivnosti za odabranog korisnika u zadanom razdoblju
+            </p>
+        </h:panelGroup>
+    </ui:define>
+
+    <ui:define name="nav" />
+</ui:composition>

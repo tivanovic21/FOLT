@@ -1,0 +1,112 @@
+<ui:composition template="/predlozak.xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<ui:define name="title">Zadaća 3 - Pregled korisnika (BAZA)</ui:define>
+
+	<ui:define name="content">
+		<h1>Pregled korisnika (BAZA)</h1>
+		<br />
+
+		<div>
+			<h2 class="vazno">Paziti na velika i mala slova!</h2>
+		</div>
+
+		<h3>Pretraživanje korisnika</h3>
+		<h:form>
+			<h:panelGrid columns="2" cellpadding="8">
+				<h:outputLabel for="ime" value="Ime:" />
+				<h:inputText id="ime" value="#{korisnici.ime}" />
+
+				<h:outputLabel for="prezime" value="Prezime:" />
+				<h:inputText id="prezime" value="#{korisnici.prezime}" />
+
+				<h:outputText value="" />
+				<h:panelGroup>
+					<h:commandButton value="Pretraži"
+						action="#{korisnici.pretraziKorisnikeBaza}" />
+
+					<h:commandButton value="Prikaži sve"
+						action="#{korisnici.prikaziSveKorisnikeBaza}" />
+
+					<h:commandButton value="Očisti" action="#{korisnici.ocisti}" />
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:form>
+
+		<h:panelGroup rendered="#{not empty korisnici.poruka}">
+			<p>
+				<h:outputText value="#{korisnici.poruka}" />
+			</p>
+		</h:panelGroup>
+
+		<h:panelGroup
+			rendered="#{korisnici.uspjeh and not empty korisnici.korisnici}">
+			<h3>Rezultati pretrage (#{korisnici.korisnici.size()} korisnika)</h3>
+
+			<h:dataTable value="#{korisnici.korisnici}" var="korisnik" border="1"
+				cellpadding="5" styleClass="korisnici-tablica">
+				<h:column>
+					<f:facet name="header">
+						<div class="th">R.br.</div>
+					</f:facet>
+					<h:outputText value="#{korisnici.korisnici.indexOf(korisnik) + 1}"
+						styleClass="desno" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<div class="th">Korisničko ime</div>
+					</f:facet>
+					<h:outputText value="#{korisnik.korisnik()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<div class="th">Ime</div>
+					</f:facet>
+					<h:outputText value="#{korisnik.ime()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<div class="th">Prezime</div>
+					</f:facet>
+					<h:outputText value="#{korisnik.prezime()}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<div class="th">Email</div>
+					</f:facet>
+					<h:outputText value="#{korisnik.email()}" />
+				</h:column>
+			</h:dataTable>
+		</h:panelGroup>
+
+		<h:panelGroup
+			rendered="#{korisnici.uspjeh and empty korisnici.korisnici}">
+			<p>
+				<h:outputText
+					value="Nema korisnika koji odgovaraju kriterijima pretrage." />
+			</p>
+		</h:panelGroup>
+
+		<style>
+table, th, td {
+	border: 1px solid;
+}
+
+.th {
+	text-align: center;
+	font-weight: bold;
+}
+
+.desno {
+	text-align: right;
+}
+
+.vazno {
+	color: red;
+}
+</style>
+	</ui:define>
+
+	<ui:define name="nav" />
+</ui:composition>
